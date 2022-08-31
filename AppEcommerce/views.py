@@ -1,7 +1,12 @@
 from django.http.request import QueryDict
 from django.shortcuts import render, HttpResponse
 from AppEcommerce.models import Vendedor, Comprador, Envio, Producto
-
+from AppEcommerce.forms import (
+    VendedorFormulario,
+    ProductoFormulario,
+    EnvioFormulario,
+    CompradorFormulario,
+)
 
 # Create your views here.
 def inicio(request):
@@ -9,21 +14,162 @@ def inicio(request):
     return render(request, "AppEcommerce/inicio.html")
 
 
+def productos(request):
+
+    if request.method == "POST":
+
+        miFormulario = ProductoFormulario(request.POST)
+
+        if miFormulario.is_valid():
+
+            informacion = miFormulario.cleaned_data
+
+            nombre_producto = (informacion["nombre_producto"],)
+            precio = (informacion["precio"],)
+            descripcion = (informacion["descripcion"],)
+
+            producto = Producto(
+                nombre_producto=nombre_producto, precio=precio, descripcion=descripcion
+            )
+            producto.save()
+
+            return render(
+                request, "AppEcommerce/inicio.html", {"mensaje": "Producto creado"}
+            )
+
+        else:
+
+            return render(request, "AppEcommerce/inicio.html", {"mensaje": "Error"})
+
+    else:
+
+        miFormulario = ProductoFormulario()
+
+    return render(request, "AppEcommerce/productos.html", {"Formulario": miFormulario})
+
+
 def vendedor(request):
 
-    return render(request, "AppEcommerce/vendedor.html")
+    if request.method == "POST":
+
+        miFormulario = VendedorFormulario(request.POST)
+
+        if miFormulario.is_valid():
+
+            informacion = miFormulario.cleaned_data
+
+            nombre = (informacion["nombre"],)
+            apellido = (informacion["apellido"],)
+            direccion = (informacion["direccion"],)
+            dni = (informacion["dni"],)
+
+            vendedores = Vendedor(
+                nombre=nombre, apellido=apellido, direccion=direccion, dni=dni
+            )
+            vendedores.save()
+
+            return render(
+                request, "AppEcommerce/inicio.html", {"mensaje": "Vendedor creado"}
+            )
+
+        else:
+
+            return render(request, "AppEcommerce/inicio.html", {"mensaje": "Error"})
+
+    else:
+
+        miFormulario = VendedorFormulario()
+
+    return render(request, "AppEcommerce/vendedor.html", {"Formulario": miFormulario})
 
 
 def comprador(request):
 
-    return render(request, "AppEcommerce/comprador.html")
+    if request.method == "POST":
+
+        miFormulario = CompradorFormulario(request.POST)
+
+        if miFormulario.is_valid():
+
+            informacion = miFormulario.cleaned_data
+
+            nombre = (informacion["nombre"],)
+            apellido = (informacion["apellido"],)
+            direccion = (informacion["direccion"],)
+            dni = (informacion["dni"],)
+
+            Compradores = Comprador(
+                nombre=nombre, apellido=apellido, direccion=direccion, dni=dni
+            )
+            Compradores.save()
+
+            return render(
+                request, "AppEcommerce/inicio.html", {"mensaje": "Comprador creado"}
+            )
+
+        else:
+
+            return render(request, "AppEcommerce/inicio.html", {"mensaje": "Error"})
+
+    else:
+
+        miFormulario = CompradorFormulario()
+
+    return render(request, "AppEcommerce/comprador.html", {"Formulario": miFormulario})
 
 
 def envio(request):
 
-    return render(request, "AppEcommerce/envio.html")
+    if request.method == "POST":
+
+        miFormulario = EnvioFormulario(
+            request.POST
+        )  # aquí mellega toda la información del html
+
+        if miFormulario.is_valid():
+
+            informacion = miFormulario.cleaned_data
+
+            direccion_emisora = (informacion["direccion_emisora"],)
+            direccion_receptora = (informacion["direccion_receptora"],)
+            descripcion = (informacion["descripcion"],)
+            metodo_envio = (informacion["metodo_envio"],)
+
+            Envios = Envio(
+                direccion_emisora=direccion_emisora,
+                direccion_receptora=direccion_receptora,
+                descripcion=descripcion,
+                metodo_envio=metodo_envio,
+            )
+            Envios.save()
+
+            return render(
+                request, "AppEcommerce/inicio.html", {"mensaje": "Envio creado"}
+            )
+
+        else:
+
+            return render(request, "AppEcommerce/inicio.html", {"mensaje": "Error"})
+
+    else:
+
+        miFormulario = EnvioFormulario()
+
+    return render(request, "AppEcommerce/envio.html", {"Formulario": miFormulario})
 
 
-def producto(request):
+def buscarVendedor(request):
+    return render(request, "AppEcommerce/buscarVendedor.html")
 
-    return render(request, "AppEcommerce/producto.html")
+
+def buscar(request):
+    vendedor_dni = request.GET.get("dni")
+    vendedor = Vendedor.objects.filter(dni=vendedor_dni)
+    if len(vendedor) != 0:
+        return render(
+            request, "AppEcommerce/ResultadosBusqueda.html", {"vendedor": vendedor}
+        )
+    else:
+        return render(
+            request, "AppEcommerce/ResultadosBusqueda.html", {"mensaje": "no hay curso"}
+        )

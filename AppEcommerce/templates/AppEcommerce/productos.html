@@ -1,0 +1,31 @@
+{% extends "AppEcommerce/padre.html" %}
+
+{% load static %}
+
+{% block contenidoQueCambia %}
+
+<h1>Productos</h1>
+<p>Aquí tenemos info de los Productos</p>
+
+
+
+<h1>Formulario - Agregar Producto</h1>
+
+
+<form action="{% url 'Productos' %}" method="POST">{% csrf_token %}
+
+    
+        
+<table>
+
+    {{ Formulario.as_table }}
+
+
+ </table>
+
+
+        <input type="submit", value="Enviar">
+
+    </form>
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "AppEcommerce/padre.html" %}
+
+{% load static %}
+
+{% block contenidoQueCambia %}
+
+{% if mensaje %}
+<h2>{{ mensaje }}</h2>
+
+{% else %}
+
+<h1>Resultados de Busqueda</h1>
+<p>Aquí tenemos info de los Vendedores que encontramos{</p>
+
+{% for vendedor in Vendedor %}
+
+<h1>{{ vendedor.nombre }}</h1>
+<h1>{{ vendedor.dni }}</h1>
+
+{% endfor %}
+{% endif %}
+{% endblock %}
