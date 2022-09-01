@@ -8,5 +8,34 @@
   
     <h1>{{ mensaje }}</h1>
 
+  
+
+    <h3>Podes buscar un Vendedor ingresando su DNI:</h3>
+
+    <form action="/AppEcommerce/buscar/" method="GET">
+
+        <input type="number" name="dni" id="dni">
+
+        <input type="submit" value="Buscar">
+
+    </form>
+
+    
+
+    {% if vendedores %}
+
+    <p>El vendedor con dni {{ dni }} es:</p>
+
+    <ul>
+
+	{% for vendedor in vendedores %}
+		<li> nombre del vendedor es: {{vendedor.nombre}} </li>
+		<li> DNI del vendedor es: {{vendedor.dni}} </li>
+	{% endfor %}
+
+    </ul>
+
+    {% endif %}
+
 {% endblock %}
 

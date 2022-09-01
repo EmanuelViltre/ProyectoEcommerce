@@ -23,8 +23,8 @@ class Vendedor(models.Model):
 
 class Producto(models.Model):
     nombre_producto = models.CharField(max_length=200)
-    precio = models.DecimalField(max_digits=5, decimal_places=2)
-    descripcion = models.TextField()
+    precio = models.IntegerField()
+    descripcion = models.CharField(max_length=200)
 
     def __str__(self):
         return self.nombre_producto + " " + str(self.precio)
@@ -33,7 +33,7 @@ class Producto(models.Model):
 class Envio(models.Model):
     direccion_emisora = models.CharField(max_length=200)
     direccion_receptora = models.CharField(max_length=200)
-    descripcion = models.TextField()
+    descripcion = models.CharField(max_length=200)
     metodo_envio = models.CharField(max_length=200)
 
     def __str__(self):

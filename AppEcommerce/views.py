@@ -25,7 +25,7 @@ def productos(request):
             informacion = miFormulario.cleaned_data
 
             nombre_producto = (informacion["nombre_producto"],)
-            precio = (informacion["precio"],)
+            precio = informacion["precio"]
             descripcion = (informacion["descripcion"],)
 
             producto = Producto(
@@ -61,7 +61,7 @@ def vendedor(request):
             nombre = (informacion["nombre"],)
             apellido = (informacion["apellido"],)
             direccion = (informacion["direccion"],)
-            dni = (informacion["dni"],)
+            dni = informacion["dni"]
 
             vendedores = Vendedor(
                 nombre=nombre, apellido=apellido, direccion=direccion, dni=dni
@@ -96,7 +96,7 @@ def comprador(request):
             nombre = (informacion["nombre"],)
             apellido = (informacion["apellido"],)
             direccion = (informacion["direccion"],)
-            dni = (informacion["dni"],)
+            dni = informacion["dni"]
 
             Compradores = Comprador(
                 nombre=nombre, apellido=apellido, direccion=direccion, dni=dni
@@ -122,9 +122,7 @@ def envio(request):
 
     if request.method == "POST":
 
-        miFormulario = EnvioFormulario(
-            request.POST
-        )  # aquí mellega toda la información del html
+        miFormulario = EnvioFormulario(request.POST)
 
         if miFormulario.is_valid():
 
@@ -158,18 +156,19 @@ def envio(request):
     return render(request, "AppEcommerce/envio.html", {"Formulario": miFormulario})
 
 
-def buscarVendedor(request):
-    return render(request, "AppEcommerce/buscarVendedor.html")
-
-
 def buscar(request):
-    vendedor_dni = request.GET.get("dni")
-    vendedor = Vendedor.objects.filter(dni=vendedor_dni)
-    if len(vendedor) != 0:
+
+    if request.GET["dni"]:
+
+        dni = request.GET["dni"]
+        vendedores = Vendedor.objects.filter(dni__icontains=dni)
+
         return render(
-            request, "AppEcommerce/ResultadosBusqueda.html", {"vendedor": vendedor}
+            request, "AppEcommerce/inicio.html", {"vendedores": vendedores, "dni": dni}
         )
+
     else:
-        return render(
-            request, "AppEcommerce/ResultadosBusqueda.html", {"mensaje": "no hay curso"}
-        )
+
+        respuesta = "No enviaste datos"
+
+        return HttpResponse(respuesta)

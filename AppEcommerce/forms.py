@@ -17,7 +17,7 @@ class CompradorFormulario(forms.Form):
 
 class ProductoFormulario(forms.Form):
     nombre_producto = forms.CharField(max_length=200)
-    precio = forms.DecimalField(max_digits=10, decimal_places=2)
+    precio = forms.IntegerField()
     descripcion = forms.CharField(max_length=200)
 
 
